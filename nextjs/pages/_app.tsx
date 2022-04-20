@@ -4,6 +4,11 @@ import { Provider, chain, defaultChains, Chain } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { WalletLinkConnector } from "wagmi/connectors/walletLink";
+import { createClient, Provider as ProviderUrql } from "urql";
+
+const client = createClient({
+  url: "https://api.thegraph.com/subgraphs/id/Qmf6t4W8obuBcsz243q66c6F1CtxHaQfDLNbPXcWc9qnaX",
+});
 
 function MyApp({ Component, pageProps }: AppProps) {
   const infuraId = process.env.NEXT_PUBLIC_INFURA_PROJECT_ID;
@@ -36,9 +41,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   };
 
   return (
-    <Provider>
-      <Component {...pageProps} autoConnect connectors={connectors} />
-    </Provider>
+    <ProviderUrql value={client}>
+      <Provider>
+        <Component {...pageProps} autoConnect connectors={connectors} />
+      </Provider>
+    </ProviderUrql>
   );
 }
 

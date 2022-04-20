@@ -11,11 +11,13 @@
   "dependencies": {
     "daisyui": "^2.14.1",
     "ethers": "^5.6.4",
+    "graphql": "^16.3.0",
     "iron-session": "^6.1.2",
     "next": "12.1.5",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "siwe": "^1.1.6",
+    "urql": "^2.2.0",
     "wagmi": "0.2.27"
   },
   "devDependencies": {
