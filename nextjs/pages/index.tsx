@@ -2,8 +2,15 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Navbar from "../components/Navbar";
 import styles from "../styles/Home.module.css";
+import { useQuery } from "urql";
 
 const Home: NextPage = () => {
+  const [result, reexecuteQuery] = useQuery({
+    query: QUERY,
+  });
+
+  const { data, fetching, error } = result;
+
   return (
     <div data-theme="cyberpunk" className={styles.container}>
       <Head>
@@ -25,6 +32,15 @@ const Home: NextPage = () => {
                 repudiandae et a id nisi.
               </p>
               <button className="btn btn-primary">Get Started</button>
+              <div className="mt-3">
+                {fetching ? (
+                  <p>Loading...</p>
+                ) : (
+                  <DiypunkOwners
+                    addresses={data.tokens.map((token: any) => token.owner.id)}
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -44,3 +60,37 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+//
+
+const QUERY = `
+{
+  tokens(first: 5) {
+    id
+    owner {
+      id
+    }
+    uri
+    transfers {
+      id
+    }
+  }
+  owners(first: 5) {
+    id
+    ownedTokens {
+      id
+    }
+    balance
+  }
+}
+`;
+
+const DiypunkOwners = (props: { addresses: string[] }) => {
+  return (
+    <ul>
+      {props.addresses.map((address: string) => (
+        <li key={address}>{address}</li>
+      ))}
+    </ul>
+  );
+};
